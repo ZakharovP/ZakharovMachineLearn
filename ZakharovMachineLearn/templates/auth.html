@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    <style>
+        .auth-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .header {
+            font-size: 12px;
+            color: blue;
+        }
+        .hidden {
+            display: none;
+        }
+        ul.errorlist li {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block body %}
+    <div>
+        <div class="auth-nav">
+            <a href="#sign-in" onclick="handleChangingSection(event)">Вход</a>
+            <a href="#sign-up" onclick="handleChangingSection(event)">Регистрация</a>
+        </div>
+        <div class="sign-in-container">
+            <div class="header">Войти</div>
+            <form action="/sign-in/" method="POST">
+                {% csrf_token %}
+                {{ sign_in_form.as_p }}
+                <input type="submit" value="Вход">
+            </form>
+
+        </div>
+        <div class="sign-up-container hidden">
+            <div class="header">Зарегистрироваться</div>
+            <form action="/sign-up/" method="POST">
+                {% csrf_token %}
+                {{ sign_up_form.as_p }}
+                <input type="submit" value="Зарегистрироваться">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        let section = "sign-in";
+        if (location.hash === "#sign-in") {
+            section = "sign-in";
+        } else if (location.hash === "#sign-up") {
+            section = "sign-up";
+        } else if (location.pathname.replace(/\//gim, "") !== "auth") {
+            section = location.pathname.replace(/\//gim, "");
+        }
+
+        console.log("SECTION = ", section);
+
+        changeSection(section)
+
+        function handleChangingSection(evt) {
+            evt.preventDefault();
+            const hash = evt.target.href.split("#")[1];
+            console.log("hash = ", hash);
+            changeSection(hash);
+        }
+
+        function changeSection(section) {
+            if (section === "sign-up") {
+                document.querySelector(".sign-in-container").classList.add("hidden");
+                document.querySelector(".sign-up-container").classList.remove("hidden");
+                console.log("sign-in");
+            } else if (section === "sign-in") {
+                document.querySelector(".sign-up-container").classList.add("hidden");
+                document.querySelector(".sign-in-container").classList.remove("hidden");
+                console.log("sign-up");
+            }
+        }
+    </script>
+{% endblock %}

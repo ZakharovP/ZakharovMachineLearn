@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div>
+        {% if post_id <= 0 %}
+            <div>НЕПРАВИЛЬНЫЙ ФОРМАТ ПОСТА!!!</div>
+        {% else %}
+        <div>
+            <div>Форма для добавления комментария для поста # {{ post_id }}</div>
+            <form action="/comment/" method="POST">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <input type="submit" value="Отправить">
+            </form>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
