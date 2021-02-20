@@ -1,19 +1,162 @@
 {% extends 'base.html' %}
 
+{% block style %}
+    <style>
+        .container {
+            border: 1px solid gray;
+        }
+        .content {
+            background: #EEE;
+        }
+        .rating-container {
+            margin: 20px;
+            border: 1px solid red;
+            padding: 40px;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .rating-container .current {
+            margin: 20px 0;
+            font-size: 30px;
+        }
+        .rating-container .estimate-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .rating {
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            background: green;
+            display: flex;
+        }
+        .rating > span {
+            display: inline-block;
+            position: relative;
+            width: 1.2em;
+            font-size: 40px;
+            background: red;
+            text-align: center;
+            padding: 10px 0;
+            box-sizing: border-box;
+            color: yellow;
+        }
+        .rating > span:hover {
+            cursor: pointer;
+        }
+        .rating > span:hover:before,
+        .rating > span:hover ~ span:before {
+            content: "\2605";
+            position: absolute;
+        }
+
+    </style>
+{% endblock %}
+
+
 {% block body %}
-    <div>
-        {% if post_id <= 0 %}
-            <div>НЕПРАВИЛЬНЫЙ ФОРМАТ ПОСТА!!!</div>
-        {% else %}
+    <div class="container">
+        <div class="content">
+            <header>{{ post.title }}</header>
+            <main>
+                {% autoescape off %}
+                    {{ post.body }}
+                {% endautoescape %}
+            </main>
+        </div>
         <div>
+            VIEWS: {{ post.views }}
+        </div>
+        <div class="rating-container">
+            <div class="current">
+                Текущий рейтинг: <span class="average">{{ post.rating }}</span>
+                (Оценок: <span class="amount">{{ post.estimation_amount }}</span>)
+            </div>
+            {% if is_user_estimated %}
+                <div>
+                    Ваш оценка поста принята
+                </div>
+            {% else %}
+                <div class="estimate-container">
+                    <span>
+                        Оценить:
+                    </span>
+                    <div class="rating">
+                        {% for points in '54321'|make_list %}
+                            <span data-points="{{ points }}">☆</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="comments">
+            <div>
+                {% if comments %}
+                    {% for comment in comments %}
+                        {% include 'comment.html' %}
+                    {% endfor %}
+                {% else %}
+                    <span>Комментариев пока нет</span>
+                {% endif %}
+            </div>
             <div>Форма для добавления комментария для поста # {{ post_id }}</div>
-            <form action="/comment/" method="POST">
+            <form action="/comment/{{ post.id }}/" method="POST">
                 {% csrf_token %}
                 {{ comment_form.as_p }}
                 <input type="submit" value="Отправить">
             </form>
+            {% if comment_success == "1" %}
+                <div>Ваше комментарий успешно отправлен!</div>
+            {% elif comment_success == "0" %}
+                <div>Что-то пошло не так...</div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 {% endblock %}
 
+{% block script %}
+    <script>
+        if (document.querySelector(".rating-container .rating")) {
+            document.querySelector(".rating-container .rating").addEventListener("click", evt => {
+                const el = evt.target;
+                const points = el.dataset.points;
+                //alert(points);
+                const data = {
+                    score: points,
+                    post: {{ post.id }}
+                };
+                axios.post(
+                    "/estimate/",
+                    data,
+                    {
+                        headers: {
+                            "X-CSRFTOKEN": getCookie("csrftoken")
+                        }
+                    }
+                 )
+                .then(response => {
+                    const data = response.data;
+                    console.log("DATA = ", data);
+                    if (data.success) {
+                        alert("Ваша оценка сохранена!");
+                        document.querySelector(".estimate-container").innerHTML = "Ваша оценка поста принята";
+
+
+                        document.querySelector(".rating-container .current > span.average").textContent = data["rating"];
+                        document.querySelector(".rating-container .current > span.amount").textContent = data["estimation_amount"];
+                    } else {
+                        alert(data.errors.join("\n"));
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Что-то пошло не так...");
+                });
+            });
+        }
+    </script>
+{% endblock %}

@@ -17,7 +17,9 @@ from django.contrib import admin
 from django.urls import path
 
 from .view import (
-    main, auth, sign_in, sign_up, logout_view, post, comment
+    main, auth, sign_in,
+    sign_up, logout_view,
+    post, comment, estimate
 )
 
 urlpatterns = [
@@ -29,5 +31,6 @@ urlpatterns = [
     path('logout/', logout_view),
     path('post/', post),
     path('post/<int:post_id>/', post),
-    path('comment/', comment)
+    path('estimate/', estimate),
+    path('comment/<int:post_id>/', comment)
 ]

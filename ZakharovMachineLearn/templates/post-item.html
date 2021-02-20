@@ -1,0 +1,19 @@
+<div>
+    <div>
+        <a href="/post/{{ post.id }}">{{ post.title }}</a>
+    </div>
+    <div>
+        Кол-во просмотров: {{ post.views }}
+    </div>
+    <div>
+        Кол-во комментариев: {{ post.comment_amount }}
+    </div>
+    <div>
+        Рейтинг: {{ post.rating }} (Всего оценок - {{ post.estimation_amount }})
+    </div>
+    <!--<div class="body">
+        {% autoescape off %}
+            {{ post.body }}
+        {% endautoescape %}
+    </div>-->
+</div>

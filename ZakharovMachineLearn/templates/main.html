@@ -2,32 +2,15 @@
 
 {% block body %}
     <i>MAIN</i>
-    <a href="/auth">Вход в систему</a>
-    <form action="/" method="post">
+
+    {% for post in posts %}
+        {% include 'post-item.html' %}
+    {% endfor %}
+
+
+    <form action="/logout/" method="POST">
         {% csrf_token %}
-        {{ name_form }}
-        <input type="submit" value="Submit">
-
-        {% if form.errors %}
-        <b>Форма не валидна!</b>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <div class="error">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-        {% endif %}
+        <input type="submit" value="Выход">
     </form>
-
-<form action="/logout/" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Выход">
-</form>
 
 {% endblock body %}

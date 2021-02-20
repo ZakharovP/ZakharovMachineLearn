@@ -71,7 +71,6 @@ class SignInForm(AuthenticationForm, AuthMixin):
         fields = ('username', 'password',)
 
 
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
