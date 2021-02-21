@@ -1,19 +1,42 @@
-<div>
-    <div>
+<div class="post-item">
+    <div class="title">
         <a href="/post/{{ post.id }}">{{ post.title }}</a>
     </div>
-    <div>
-        Кол-во просмотров: {{ post.views }}
-    </div>
-    <div>
-        Кол-во комментариев: {{ post.comment_amount }}
-    </div>
-    <div>
-        Рейтинг: {{ post.rating }} (Всего оценок - {{ post.estimation_amount }})
-    </div>
-    <!--<div class="body">
+    <div class="body">
         {% autoescape off %}
-            {{ post.body }}
+            {{ post.body | striptags | truncatechars:60 }}
         {% endautoescape %}
-    </div>-->
+    </div>
+    <div class="footer">
+        <div class="indicator">
+            <span>
+                <i class="material-icons">
+                    visibility
+                </i>
+            </span>
+            <span>
+                {{ post.views }}
+            </span>
+        </div>
+        <div class="indicator">
+            <span>
+                <i class="material-icons">
+                    comment
+                </i>
+            </span>
+            <span>
+                {{ post.comment_amount }}
+            </span>
+        </div>
+        <div class="indicator">
+            <span>
+                <i class="material-icons">
+                    star
+                </i>
+            </span>
+            <span>
+                {{ post.rating | floatformat:"1" }} (Оценок - {{ post.estimation_amount }})
+            </span>
+        </div>
+    </div>
 </div>

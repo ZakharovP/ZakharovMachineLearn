@@ -22,5 +22,5 @@ class Estimation(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, null=True, default=None, on_delete=models.CASCADE)
-    text = models.CharField(max_length=50)
+    text = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)

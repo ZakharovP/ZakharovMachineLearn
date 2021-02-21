@@ -1,0 +1,25 @@
+.comment {
+    border: 1px solid black;
+    width: 600px;
+    padding: 10px;
+    background-color: rgba(0, 51, 102, 0.25);
+    box-shadow: 2px 2px 10px 2px rgba(0, 126, 255, 0.5);
+    box-sizing: border-box;
+}
+.comment .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 25px;
+    font-size: 14px;
+}
+
+.comment .body {
+    background-color: rgba(135, 206, 250, 0.05);
+    margin-top: 40px;
+    box-sizing: border-box;
+    font-size: 19px;
+    padding: 15px;
+    border-radius: 20px;
+}

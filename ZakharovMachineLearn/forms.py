@@ -72,6 +72,7 @@ class SignInForm(AuthenticationForm, AuthMixin):
 
 
 class CommentForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Новое сообщение"}), label="")
     class Meta:
         model = Comment
         fields = ['text']

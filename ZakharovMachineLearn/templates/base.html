@@ -4,10 +4,55 @@
     <title>Проект</title>
     <script src="{% static 'js/utils.js' %}" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" crossorigin="anonymous"></script>
+    <link href = "https://fonts.googleapis.com/icon?family=Material+Icons" rel = "stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        #auth-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        #auth-button > button {
+            width: 35px;
+            height: 40px;
+            cursor: pointer;
+            background: rgba(200, 250, 255, 0.18);
+            box-shadow: 2px 2px 4px 2px rgba(255, 255, 255, 0.25);
+        }
+
+        #auth-button > button > i {
+            color: white;
+        }
+    </style>
     {% block style %}
     {% endblock %}
 </head>
 <body>
+    {% if request.path != '/auth/' and request.path != '/sign-in/' and request.path != '/sign-out/' %}
+        {% if user.is_authenticated %}
+            <form id="auth-button" action="/logout/" method="POST">
+                {% csrf_token %}
+                <button type="submit">
+                    <i class="material-icons">
+                        logout
+                    </i>
+                </button>
+            </form>
+        {% else %}
+            <form id="auth-button" action="/auth/" method="GET">
+                <button type="submit">
+                    <i class="material-icons">
+                        login
+                    </i>
+                </button>
+            </form>
+        {% endif %}
+    {% endif %}
+
     {% block body %}
     {% endblock body %}
 

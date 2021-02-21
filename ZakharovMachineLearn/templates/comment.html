@@ -1,4 +1,13 @@
 <div class="comment">
-    TEXT: {{ comment.text }}
-    POST: {{ comment.post.id }}
+    <div class="header">
+        <span>
+            {{ comment.user.get_full_name }}
+        </span>
+        <span>
+            {{ comment.created_at }}
+        </span>
+    </div>
+    <div class="body">
+        {{ comment.text }}
+    </div>
 </div>

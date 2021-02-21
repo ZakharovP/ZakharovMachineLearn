@@ -1,13 +1,59 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block style %}
     <style>
-        .container {
-            border: 1px solid gray;
+        h1 {
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 25px;
+            max-width: 70vw;
         }
-        .content {
-            background: #EEE;
+        main {
+            font-size: 22px;
+            color: #CDC1FF;
+            margin: 0 auto;
+            margin-top: 40px;
+            width: 85vw;
+            text-indent: 2em;
         }
+
+        .indicators {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 45px;
+            margin-bottom: 30px;
+            padding: 10px 30px;
+        }
+
+        .indicators > .indicator {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .indicators > .indicator {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .indicators > .indicator {
+                font-size: 16px;
+            }
+        }
+
+        .indicators > .indicator > span {
+            display: inline-block;
+            margin: 0 3px;
+        }
+
+
         .rating-container {
             margin: 20px;
             border: 1px solid red;
@@ -18,9 +64,14 @@
             justify-content: center;
             align-items: center;
         }
+
+        .rating-container > .result {
+            font-size: 40px;
+        }
+
         .rating-container .current {
             margin: 20px 0;
-            font-size: 30px;
+            font-size: 16px;
         }
         .rating-container .estimate-container {
             display: flex;
@@ -28,10 +79,16 @@
             justify-content: center;
             align-items: center;
         }
+        .rating-container .estimate-container .text {
+            font-size: 20px;
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            top: 5px;
+        }
         .rating {
             unicode-bidi: bidi-override;
             direction: rtl;
-            background: green;
             display: flex;
         }
         .rating > span {
@@ -39,7 +96,6 @@
             position: relative;
             width: 1.2em;
             font-size: 40px;
-            background: red;
             text-align: center;
             padding: 10px 0;
             box-sizing: border-box;
@@ -54,35 +110,147 @@
             position: absolute;
         }
 
+
+        .comments {
+            margin-top: 30px;
+        }
+
+        .comments > .header {
+            font-size: 30px;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .comments > form {
+            margin: 26px auto;
+            background: rgba(10, 47, 170, 0.5);
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            border-radius: 20px;
+            box-shadow: 2px 2px 20px 1px rgba(100, 247, 255, 0.35);
+        }
+
+        .comments > form textarea {
+            width: 500px;
+            border-width: 0;
+            padding: 4px;
+            margin: 0;
+            margin-top: 5px;
+        }
+
+        .comments > form input[type="submit"] {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .comments > .message {
+            text-align: center;
+            font-size: 25px;
+        }
+
+        .comments .comment-list {
+            margin: 30px auto;
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .comments .comment-list .no-comments-msg {
+            margin: 50px auto;
+            font-size: 40px;
+            text-align: center;
+        }
+
+        #created_datetime {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 14px;
+        }
+
+
     </style>
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
 {% endblock %}
 
 
 {% block body %}
-    <div class="container">
-        <div class="content">
-            <header>{{ post.title }}</header>
-            <main>
-                {% autoescape off %}
-                    {{ post.body }}
-                {% endautoescape %}
-            </main>
+    <div id="created_datetime">
+        {{ post.created_at }}
+    </div>
+    <h1>{{ post.title }}</h1>
+    <main>
+        {% autoescape off %}
+            {{ post.body }}
+        {% endautoescape %}
+    </main>
+
+    <div class="indicators">
+        <div class="indicator">
+            <span>Просмотры:</span>
+            <span>
+                {{ post.views | floatformat:"0" }}
+            </span>
+            <span>
+                <i class="material-icons">
+                    visibility
+                </i>
+            </span>
         </div>
-        <div>
-            VIEWS: {{ post.views }}
+        <div class="indicator">
+            <span>Комментарии:</span>
+            <span>
+                {{ post.comment_amount | floatformat:"0" }}
+            </span>
+            <span>
+                <i class="material-icons">
+                    comment
+                </i>
+            </span>
         </div>
+        <div class="indicator">
+            <span>Рейтинг:</span>
+            <span>
+                {{ post.rating | floatformat:"1" }}
+            </span>
+            <span>
+                <i class="material-icons">
+                    star
+                </i>
+            </span>
+        </div>
+        <div class="indicator">
+            <span>Оценки:</span>
+            <span>
+                {{ post.estimation_amount | floatformat:"0" }}
+            </span>
+            <span>
+                <i class="material-icons">
+                    calculate
+                </i>
+            </span>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
         <div class="rating-container">
-            <div class="current">
-                Текущий рейтинг: <span class="average">{{ post.rating }}</span>
-                (Оценок: <span class="amount">{{ post.estimation_amount }}</span>)
-            </div>
             {% if is_user_estimated %}
-                <div>
+                <div class="result">
                     Ваш оценка поста принята
                 </div>
             {% else %}
                 <div class="estimate-container">
-                    <span>
+                    <span class="text">
                         Оценить:
                     </span>
                     <div class="rating">
@@ -92,27 +260,34 @@
                     </div>
                 </div>
             {% endif %}
-        </div>
-        <div class="comments">
-            <div>
-                {% if comments %}
-                    {% for comment in comments %}
-                        {% include 'comment.html' %}
-                    {% endfor %}
-                {% else %}
-                    <span>Комментариев пока нет</span>
-                {% endif %}
+            <div class="current">
+                Текущий рейтинг: <span class="average">{{ post.rating }}</span>
+                (Оценок: <span class="amount">{{ post.estimation_amount }}</span>)
             </div>
-            <div>Форма для добавления комментария для поста # {{ post_id }}</div>
+        </div>
+    {% endif %}
+
+    <div class="comments">
+        {% if user.is_authenticated %}
+            <div class="header">Добавить комментарий</div>
             <form action="/comment/{{ post.id }}/" method="POST">
                 {% csrf_token %}
                 {{ comment_form.as_p }}
                 <input type="submit" value="Отправить">
             </form>
             {% if comment_success == "1" %}
-                <div>Ваше комментарий успешно отправлен!</div>
+                <div class="message">Ваш комментарий успешно отправлен!</div>
             {% elif comment_success == "0" %}
-                <div>Что-то пошло не так...</div>
+                <div class="message">Что-то пошло не так...</div>
+            {% endif %}
+        {% endif %}
+        <div class="comment-list">
+            {% if comments %}
+                {% for comment in comments %}
+                    {% include 'comment.html' %}
+                {% endfor %}
+            {% else %}
+                <span class="no-comments-msg">Комментариев пока нет</span>
             {% endif %}
         </div>
     </div>

@@ -15,10 +15,9 @@ from .models import (
 )
 
 
-@login_required
 @require_http_methods(["GET"])
 def main(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by("-created_at")
 
     context = {
         "posts": posts
@@ -26,31 +25,11 @@ def main(request):
 
     return render(request, "main.html", context, status=200)
 
-    """if request.method == "GET":
-        context = {
-            "name_form": NameForm()
-        }
-        return render(request, "main.html", context, status=200)
-    elif request.method == "POST":
-        form = NameForm(request.POST)
-        if form.is_valid():
-            your_name = form.cleaned_data["your_name"]
-            return HttpResponse("your_name = " + your_name)
-
-        print("NOT VALID!")
-
-        context = {
-            "name_form": form
-        }
-
-        return render(request, "main.html", context, status=200)
-    response = HttpResponse("Method not allowed", 405)
-    response.status_code = 405
-    return response"""
-
 
 @require_http_methods(["GET"])
 def auth(request):
+    if request.user.is_authenticated:
+        return redirect("/")
     sign_up_form = SignUpForm()
     sign_in_form = SignInForm()
     context = {
@@ -104,7 +83,6 @@ def sign_up(request):
         return render(request, "auth.html", context)
 
 
-@login_required
 @require_http_methods(["GET"])
 def post(request, post_id=-1):
     comment_success = request.GET.get("comment_success")
@@ -117,19 +95,21 @@ def post(request, post_id=-1):
     post.views += 1
     post.save()
 
-    comments = Comment.objects.filter(post_id=post_id)
+    comments = Comment.objects.filter(post_id=post_id).order_by("-created_at")
 
     #print("post.estimations ======== ", post.estimation_set.filter(user=request.user))
 
     comment_form = CommentForm()
-    print("comments = ", comments)
     context = {
         "comment_form": comment_form,
         "post": post,
         "comments": comments,
         "comment_success": comment_success,
-        "is_user_estimated": len(post.estimation_set.filter(user=request.user)) > 0
     }
+
+    if request.user.is_authenticated:
+        context["is_user_estimated"] = len(post.estimation_set.filter(user=request.user)) > 0
+
     return render(request, "post.html", context)
 
 
@@ -153,6 +133,7 @@ def comment(request, post_id=None):
 
         return redirect(f"/post/{post_id}?comment_success=1")
     else:
+        print(form.errors)
         return redirect(f"/post/{post_id}?comment_success=0")
     #return render(request, "post.html", context)
 

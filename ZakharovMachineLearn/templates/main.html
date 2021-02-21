@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
+{% load static %}
+
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/post-item.css' %}">
+    <style>
+        #root {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <i>MAIN</i>
+    <div id="root">
+        <h1>Блог по машинному обучению</h1>
 
-    {% for post in posts %}
-        {% include 'post-item.html' %}
-    {% endfor %}
+        {% for post in posts %}
+            {% include 'post-item.html' %}
+        {% endfor %}
 
-
-    <form action="/logout/" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Выход">
-    </form>
-
+    </div>
 {% endblock body %}
