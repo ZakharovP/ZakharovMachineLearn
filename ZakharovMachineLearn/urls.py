@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path
 
 from .view import (
-    main, auth, sign_in,
+    PostListView, main, auth, sign_in,
     sign_up, logout_view,
-    post, comment, estimate
+    post, comment, estimate,
+    mail_check
 )
 
 urlpatterns = [
-    path('', main),
+    path('', PostListView.as_view()),
     path('admin/', admin.site.urls),
     path('auth/', auth),
     path('sign-in/', sign_in),
@@ -32,5 +33,6 @@ urlpatterns = [
     path('post/', post),
     path('post/<int:post_id>/', post),
     path('estimate/', estimate),
-    path('comment/<int:post_id>/', comment)
+    path('comment/<int:post_id>/', comment),
+    path('mail_check/', mail_check)
 ]

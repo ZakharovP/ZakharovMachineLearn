@@ -5,6 +5,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.core.paginator import Paginator
+from django.views.generic.list import ListView
+
+
 
 from .forms import (
     NameForm, SignUpForm, SignInForm, CommentForm
@@ -14,16 +19,42 @@ from .models import (
     Post, Comment, Estimation
 )
 
+from . import settings
+
+def mail_check(request):
+    try:
+        send_mail(
+            'Тема сообщения',
+            'Проверка',
+            settings.EMAIL_HOST_USER,
+            ["zakharovpetr@mail.ru"],
+            fail_silently=False,
+        )
+    except Exception as err:
+        print(err)
+        return HttpResponse("Ошибка...")
+
+    return HttpResponse("Отправлено!")
+
 
 @require_http_methods(["GET"])
 def main(request):
-    posts = Post.objects.order_by("-created_at")
+   posts = Post.objects.order_by("-created_at")
 
-    context = {
-        "posts": posts
-    }
+   context = {
+       "posts": posts
+   }
 
-    return render(request, "main.html", context, status=200)
+   return render(request, "main.html", context, status=200)
+
+
+class PostListView(ListView):
+    template_name = "main.html"
+    context_object_name = "posts"
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Post.objects.order_by("-created_at").filter(is_active=True)
 
 
 @require_http_methods(["GET"])
@@ -73,6 +104,19 @@ def sign_up(request):
         password = sign_up_form.cleaned_data.get('password1')
         user = authenticate(username=username, password=password)
         login(request, user)
+
+
+        email = sign_up_form.cleaned_data["email"]
+        print("email = ", email)
+
+        send_mail(
+            'Уведомление о регистрации',
+            'На данный email была совершена регистрация в приложении ZakharovMachineLearn',
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=False,
+        )
+
         return redirect('/')
     else:
         print("NOT VALID!", sign_up_form.errors)
@@ -89,6 +133,8 @@ def post(request, post_id=-1):
 
     try:
         post = Post.objects.get(pk=post_id)
+        if not post.is_active:
+            raise Post.DoesNotExist()
     except Post.DoesNotExist:
         raise Http404("Страница не найдена")
 
@@ -96,15 +142,18 @@ def post(request, post_id=-1):
     post.save()
 
     comments = Comment.objects.filter(post_id=post_id).order_by("-created_at")
+    comment_paginator = Paginator(comments, 2)
 
-    #print("post.estimations ======== ", post.estimation_set.filter(user=request.user))
+    page_number = request.GET.get("page", 1)
+    comment_page = comment_paginator.page(page_number)
 
     comment_form = CommentForm()
     context = {
         "comment_form": comment_form,
         "post": post,
-        "comments": comments,
+        "comments": comment_page.object_list,
         "comment_success": comment_success,
+        "page_obj": comment_page
     }
 
     if request.user.is_authenticated:

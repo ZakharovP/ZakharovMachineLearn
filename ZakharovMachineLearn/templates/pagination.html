@@ -1,0 +1,29 @@
+{% if page_obj.object_list %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; В начало</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="step left">
+                    <i class="material-icons">
+                        navigate_before
+                    </i>
+                </a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="step right">
+                    <i class="material-icons">
+                        navigate_next
+                    </i>
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">
+                   В конец &raquo;
+                </a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}

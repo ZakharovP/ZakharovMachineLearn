@@ -1,0 +1,36 @@
+.pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.pagination .step-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination .step-links a {
+    font-size: 20px;
+    text-decoration: none;
+    color: #cce6ff;
+}
+
+.pagination .step-links a.step {
+    display: inline-block;
+    font-size: 23px;
+    margin: 0 30px;
+    color: #99ceff;
+    border: 1px solid #99ceff;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.pagination .step-links span.current {
+    display: inline-block;
+    font-size: 25px;
+    margin: 0 10px;
+}

@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 ROOT_URLCONF = 'ZakharovMachineLearn.urls'
@@ -116,7 +117,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -134,3 +135,15 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_URL = "/auth"
+
+#  ZakharovMachineLearn
+
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST_USER = "podrivkamazov@gmail.com"
+EMAIL_HOST_PASSWORD = "pjvyirytroufelsv"
+
+
+DATETIME_FORMAT = 'd F Y H:i'

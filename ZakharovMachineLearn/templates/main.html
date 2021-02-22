@@ -17,10 +17,12 @@
 {% block body %}
     <div id="root">
         <h1>Блог по машинному обучению</h1>
+        {% include "pagination.html" %}
 
         {% for post in posts %}
             {% include 'post-item.html' %}
         {% endfor %}
 
     </div>
+    {% include "pagination.html" %}
 {% endblock body %}

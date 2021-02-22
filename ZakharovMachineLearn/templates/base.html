@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Проект</title>
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet">
     <script src="{% static 'js/utils.js' %}" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" crossorigin="anonymous"></script>
     <link href = "https://fonts.googleapis.com/icon?family=Material+Icons" rel = "stylesheet">
@@ -10,48 +11,100 @@
             background-color: black;
             color: white;
         }
-        #auth-button {
+
+        #control-base-panel {
             position: absolute;
             top: 20px;
             right: 20px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
         }
 
-        #auth-button > button {
+        #control-base-panel .to-main {
+            margin-right: 20px;
+            position: relative;
+            top: -8px;
+        }
+
+        #control-base-panel .to-main > a {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+
+        #control-base-panel .base-auth > button {
             width: 35px;
             height: 40px;
             cursor: pointer;
             background: rgba(200, 250, 255, 0.18);
             box-shadow: 2px 2px 4px 2px rgba(255, 255, 255, 0.25);
+            position: relative;
         }
 
-        #auth-button > button > i {
+        #control-base-panel .base-auth > button > i {
             color: white;
         }
+
+        #control-base-panel .base-auth > button::after {
+            font-size: 19px;
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            border-box: 0 0 4px 1px rgba(150, 150, 255, 0.5);
+            padding: 4px 8px;
+            left: 0;
+            top: calc(100% + 12px);
+            transform: translateX(-25%);
+            display: none;
+        }
+
+        #control-base-panel .base-auth > button:hover::after {
+            display: block
+        }
+
+        #control-base-panel .base-auth > button[data-type="login"]::after {
+            content: "Войти";
+        }
+
+        #control-base-panel .base-auth > button[data-type="logout"]::after {
+            content: "Выйти";
+        }
+
     </style>
     {% block style %}
     {% endblock %}
 </head>
 <body>
-    {% if request.path != '/auth/' and request.path != '/sign-in/' and request.path != '/sign-out/' %}
-        {% if user.is_authenticated %}
-            <form id="auth-button" action="/logout/" method="POST">
-                {% csrf_token %}
-                <button type="submit">
-                    <i class="material-icons">
-                        logout
-                    </i>
-                </button>
-            </form>
-        {% else %}
-            <form id="auth-button" action="/auth/" method="GET">
-                <button type="submit">
-                    <i class="material-icons">
-                        login
-                    </i>
-                </button>
-            </form>
+    <div id="control-base-panel">
+        {% if request.path != "/" %}
+            <div class="to-main">
+                <a href="/">На главную</a>
+            </div>
         {% endif %}
-    {% endif %}
+        {% if request.path != '/auth/' and request.path != '/sign-in/' and request.path != '/sign-out/' %}
+            {% if user.is_authenticated %}
+                <form class="base-auth" action="/logout/" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" data-type="logout">
+                        <i class="material-icons">
+                            logout
+                        </i>
+                    </button>
+                </form>
+            {% else %}
+                <form class="base-auth" action="/auth/" method="GET">
+                    <button type="submit" data-type="login">
+                        <i class="material-icons">
+                            login
+                        </i>
+                    </button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
 
     {% block body %}
     {% endblock body %}
