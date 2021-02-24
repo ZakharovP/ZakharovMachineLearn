@@ -1,0 +1,77 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block field_sets %}
+    {% autoescape off %}
+        <div class="body-preview" style="display: none">
+            {{ adminform.form.instance.body }}
+        </div>
+    {% endautoescape %}
+
+    {% for fieldset in adminform %}
+      {% include "admin/includes/fieldset.html" %}
+    {% endfor %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link href = "https://fonts.googleapis.com/icon?family=Material+Icons" rel = "stylesheet">
+    <style>
+        .body-preview {
+            border: 1px solid red;
+            padding: 10px;
+        }
+
+        #toggle-preview {
+            padding: 3px 6px;
+        }
+
+        #toggle-preview a {
+            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #toggle-preview i {
+            display: block;
+            font-size: 20px;
+        }
+    </style>
+    <script>
+        let visibility = false;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const bodyPreviewElem = document.querySelector(".body-preview");
+            document.querySelector(".form-row.field-body textarea[name='body']").addEventListener("input", function(evt) {
+                bodyPreviewElem.innerHTML = evt.target.value;
+            });
+        });
+
+        function toggleVisibility(evt) {
+            evt.preventDefault();
+            visibility = !visibility;
+            document.querySelector("#toggle-preview i.material-icons").textContent = visibility ? "visibility" : "visibility_off";
+            document.querySelector(".body-preview").style.display = !visibility ? "none" : "block";
+        }
+    </script>
+{% endblock %}
+
+
+{% block object-tools-items %}
+    <li>
+        <a id="toggle-preview" href="" onclick="toggleVisibility(event)" class="historylink">
+            <i class="material-icons">
+                visibility_off
+            </i>
+        </a>
+    </li>
+    <li>
+        <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink">{% translate "History" %}</a>
+    </li>
+    {% if has_absolute_url %}
+        <li>
+            <a href="{% url 'admin:view_on_site' content_type_id original.pk %}" class="viewsitelink">{% translate "View on site" %}</a>
+        </li>
+    {% endif %}
+{% endblock %}
