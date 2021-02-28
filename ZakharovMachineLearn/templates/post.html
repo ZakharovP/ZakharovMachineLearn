@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block style %}
+{% block head %}
     <style>
         h1 {
             text-align: center;
@@ -174,7 +174,7 @@
         #created_datetime {
             position: absolute;
             left: 20px;
-            top: 20px;
+            top: 90px;
             font-size: 14px;
         }
 
@@ -184,10 +184,12 @@
             font-size: 13px;
             color: #E0E0E0;
         }
-
-
     </style>
     <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
 {% endblock %}
 
 
@@ -205,6 +207,23 @@
             {{ post.body }}
         {% endautoescape %}
     </main>
+
+    {% if is_ad_visible %}
+        <aside class="ad horizontal">
+            <div class="ad-item">
+                <div class="head">Изучение машинного обучения в SkillBox</div>
+                <a href="https://skillbox.ru/course/profession-data-scientist/" target="_blank">
+                    <img src="https://mtdata.ru/u4/photo5073/20930459427-0/original.jpg" alt="Реклама skillbox">
+                </a>
+            </div>
+            <div class="ad-item">
+                <div class="head">Изучение машинного обучения в SkillFactory</div>
+                <a href="https://skillfactory.ru/dstpro" target="_blank">
+                    <img src="https://avatars.mds.yandex.net/get-zen_doc/1893760/pub_5e85dd2cddc8e520673d9961_5e85e3e0e76e9e2043c845a7/scale_1200" alt="Реклама skillfactory">
+                </a>
+            </div>
+        </aside>
+    {% endif %}
 
     <div class="indicators">
         <div class="indicator indicator-views">
@@ -308,6 +327,57 @@
 {% endblock %}
 
 {% block script %}
+    {% if post.is_markdown %}
+        <script>
+            showdown.extension('myext', function() {
+              return [
+                /*{
+                    type: 'lang',
+                    regex: /</gim,
+                    replace: '\<'
+                },*/
+                /*{
+                  type: 'lang',
+                  filter: function (text, converter, options) {
+                     text = text + "@@@@@@@@";
+                     return text;
+                  }
+                },*/
+                {
+                    type: 'listener',
+                    listeners: {
+                        'hashHTMLBlocks.before': function (event, text, converter, options, globals) {
+                            console.log("BEFORE!!!!", text);
+                            text = text.replace(/<p>/gim, "&lt;p&gt;");
+                            text = text.replace(/<\/p>/gim, "&lt;/p&gt;");
+                            return text;
+                        },
+                        'hashHTMLBlocks.after': function (event, text, converter, options, globals) {
+                            console.log("AFTER!!!!", text);
+                            //text = text.replace(/&lt;p&gt;/gim, "<p>");
+                            //text = text.replace(/&lt;\/p&gt;/gim, "</p>");
+
+
+                            /*text = text.replace(/^ {0,3}<[a-z]+\b[^>]*>$/gmi, function (wm) {
+                            return '\n\n¨K' + (globals.gHtmlBlocks.push(wm) - 1) + 'K\n\n';
+                            });*/
+                            return text;
+                        }
+                    }
+                }
+
+               ];
+            });
+            (function(){
+                const converter = new showdown.Converter({
+                    extensions: [],
+                    backslashEscapesHTMLTags: true
+                });
+                const main = document.getElementsByTagName("main")[0];
+                main.innerHTML = converter.makeHtml(main.innerHTML);
+            })();
+        </script>
+    {% endif %}
     <script>
         if (document.querySelector(".rating-container .rating")) {
             document.querySelector(".rating-container .rating").addEventListener("click", evt => {
@@ -357,5 +427,7 @@
         if (window.location.search.indexOf("page") > -1) {
             window.location.hash = "to-comments";
         }
+
+        hljs.initHighlightingOnLoad();
     </script>
 {% endblock %}

@@ -1,12 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Comment
+from .models import Comment, PostCategory
 
 from django.core.exceptions import ValidationError
-
-class NameForm(forms.Form):
-    your_name = forms.CharField(label='Your name', max_length=100, min_length=1)
 
 
 FIELD_TRANSLATION = {
@@ -76,3 +73,26 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['text']
+
+
+CHOICES= (
+    ('1', 'ME'),
+    ('2', 'YOU'),
+    ('3', 'WE'),
+)
+
+
+class PostSearchForm(forms.Form):
+    q = forms.CharField(
+        label='',
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"placeholder": "Поиск..."})
+    )
+    category = forms.ModelChoiceField(
+        label='',
+        queryset=PostCategory.objects.all(),
+        widget=forms.Select(),
+        required=False,
+        empty_label=" --- Все категории"
+    )

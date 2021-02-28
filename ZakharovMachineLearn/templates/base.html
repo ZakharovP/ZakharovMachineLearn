@@ -6,36 +6,107 @@
     <script src="{% static 'js/utils.js' %}" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" crossorigin="anonymous"></script>
     <link href = "https://fonts.googleapis.com/icon?family=Material+Icons" rel = "stylesheet">
+    <link href="{% static 'css/ad.css' %}" rel="stylesheet">
     <style>
         body {
             background-color: black;
             color: white;
+            padding-top: 60px;
+            overflow-x: hidden;
         }
 
-        #control-base-panel {
+        body > header {
+            background-color: #666666;
+            height: 60px;
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 0;
+            left: 0;
+            right: 0;
 
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 22px;
+            z-index: 100000;
+        }
+
+        body > header > .post-search {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+            margin: 0;
+        }
+
+        body > header > .post-search input[type="text"] {
+            margin: 0 4px;
+            border: none;
+            color: white;
+            text-decoration: none;
+            height: 32px;
+            font-size: 20px;
+            padding: 2px 4px;
+            color: #777;
+            box-sizing: border-box;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        body > header > .post-search select {
+            margin: 0 4px;
+            height: 32px;
+            padding: 2px 8px;
+        }
+
+        body > header > .post-search select option {
+            background: #c8a696;
+            font-size: 20px;
+            padding: 5px 0;
+        }
+
+        body > header > .post-search select option[value=""] {
+            background: #c4ac93;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        body > header > .post-search button[type="submit"] {
+            margin: 0 4px;
+            cursor: pointer;
+            height: 32px;
+        }
+
+        body > header > .post-search button[type="submit"] * {
+            pointer-events: none;
+        }
+
+        body > header > .navigation {
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: flex-end;
         }
 
-        #control-base-panel .to-main {
+        body > header > .navigation .to-main {
             margin-right: 20px;
             position: relative;
-            top: -8px;
         }
 
-        #control-base-panel .to-main > a {
+        body > header > .navigation .to-main > a {
             color: white;
             font-size: 24px;
             text-decoration: none;
         }
 
-        #control-base-panel .base-auth > button {
+        body > header > .navigation .base-auth {
+            height: 40px;
+            margin: 0;
+            padding: 0;
+        }
+
+        body > header > .navigation .base-auth > button {
             width: 35px;
             height: 40px;
             cursor: pointer;
@@ -44,11 +115,11 @@
             position: relative;
         }
 
-        #control-base-panel .base-auth > button > i {
+        body > header > .navigation .base-auth > button > i {
             color: white;
         }
 
-        #control-base-panel .base-auth > button::after {
+        body > header > .navigation .base-auth > button::after {
             font-size: 19px;
             position: absolute;
             background-color: white;
@@ -61,50 +132,66 @@
             display: none;
         }
 
-        #control-base-panel .base-auth > button:hover::after {
+        body > header > .navigation .base-auth > button:hover::after {
             display: block
         }
 
-        #control-base-panel .base-auth > button[data-type="login"]::after {
+        body > header > .navigation .base-auth > button[data-type="login"]::after {
             content: "Войти";
         }
 
-        #control-base-panel .base-auth > button[data-type="logout"]::after {
+        body > header > .navigation .base-auth > button[data-type="logout"]::after {
             content: "Выйти";
         }
-
     </style>
-    {% block style %}
+    {% block head %}
     {% endblock %}
 </head>
 <body>
-    <div id="control-base-panel">
-        {% if request.path != "/" %}
-            <div class="to-main">
-                <a href="/">На главную</a>
-            </div>
+    <header>
+        {% if search_form %}
+            <form class="post-search" action="/" method="GET">
+                {% for field in search_form %}
+                    {{ field }}
+                {% endfor %}
+                <button type="submit" data-type="logout">
+                    <i class="material-icons">
+                        search
+                    </i>
+                </button>
+            </form>
+        {% else %}
+        <div></div>
         {% endif %}
-        {% if request.path != '/auth/' and request.path != '/sign-in/' and request.path != '/sign-out/' %}
-            {% if user.is_authenticated %}
-                <form class="base-auth" action="/logout/" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" data-type="logout">
-                        <i class="material-icons">
-                            logout
-                        </i>
-                    </button>
-                </form>
-            {% else %}
-                <form class="base-auth" action="/auth/" method="GET">
-                    <button type="submit" data-type="login">
-                        <i class="material-icons">
-                            login
-                        </i>
-                    </button>
-                </form>
+
+        <div class="navigation">
+            {% if request.path != "/" %}
+                <div class="to-main">
+                    <a href="/">На главную</a>
+                </div>
             {% endif %}
-        {% endif %}
-    </div>
+            {% if request.path != '/auth/' and request.path != '/sign-in/' and request.path != '/sign-out/' %}
+                {% if user.is_authenticated %}
+                    <form class="base-auth" action="/logout/" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" data-type="logout">
+                            <i class="material-icons">
+                                logout
+                            </i>
+                        </button>
+                    </form>
+                {% else %}
+                    <form class="base-auth" action="/auth/" method="GET">
+                        <button type="submit" data-type="login">
+                            <i class="material-icons">
+                                login
+                            </i>
+                        </button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </header>
 
     {% block body %}
     {% endblock body %}

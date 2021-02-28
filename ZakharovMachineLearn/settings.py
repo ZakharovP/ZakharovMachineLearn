@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ZakharovMachineLearn.context_processors.ad_visibility'
             ],
         },
     },
@@ -147,3 +148,7 @@ EMAIL_HOST_PASSWORD = "pjvyirytroufelsv"
 
 
 DATETIME_FORMAT = 'd F Y H:i'
+
+
+ADVERTISMENT = True
+SEND_REAL_EMAIL = False

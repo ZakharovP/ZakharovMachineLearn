@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.views.generic.base import RedirectView
+
 from .view import (
     PostListView, main, auth, sign_in,
     sign_up, logout_view,
@@ -25,6 +27,8 @@ from .view import (
 
 urlpatterns = [
     path('', PostListView.as_view()),
+    #path('search/', PostListView.as_view()),
+    path('favicon.ico/', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
     path('admin/', admin.site.urls),
     path('auth/', auth),
     path('sign-in/', sign_in),

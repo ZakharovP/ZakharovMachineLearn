@@ -8,11 +8,13 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.views.generic.list import ListView
+from django.db.models import Q
 
 
 
 from .forms import (
-    NameForm, SignUpForm, SignInForm, CommentForm
+    SignUpForm, SignInForm,
+    CommentForm, PostSearchForm
 )
 
 from .models import (
@@ -41,8 +43,11 @@ def mail_check(request):
 def main(request):
    posts = Post.objects.order_by("-created_at")
 
+   search_form = PostSearchForm()
+
    context = {
-       "posts": posts
+       "posts": posts,
+       "search_form": search_form
    }
 
    return render(request, "main.html", context, status=200)
@@ -54,7 +59,26 @@ class PostListView(ListView):
     paginate_by = 4
 
     def get_queryset(self):
-        return Post.objects.order_by("-created_at").filter(is_active=True)
+        print("get_queryset self.request.GET = ", self.request.GET)
+        q = self.request.GET.get("q", "")
+        try:
+            category = int(self.request.GET.get("category", ""))
+        except ValueError:
+            category = None
+        return Post.objects.order_by("-created_at").filter(
+            Q(is_active=True) &
+            (
+                Q(body__icontains=q) |
+                Q(title__icontains=q)
+            ) &
+            (Q(category_id=category) if category else Q())
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_form"] = PostSearchForm(self.request.GET)
+
+        return context
 
 
 @require_http_methods(["GET"])
@@ -109,13 +133,14 @@ def sign_up(request):
         email = sign_up_form.cleaned_data["email"]
         print("email = ", email)
 
-        send_mail(
-            'Уведомление о регистрации',
-            'На данный email была совершена регистрация в приложении ZakharovMachineLearn',
-            settings.EMAIL_HOST_USER,
-            [email],
-            fail_silently=False,
-        )
+        if settings.SEND_REAL_EMAIL:
+            send_mail(
+                'Уведомление о регистрации',
+                'На данный email была совершена регистрация в приложении ZakharovMachineLearn',
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
 
         return redirect('/')
     else:

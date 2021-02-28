@@ -15,6 +15,9 @@
 
 {% block extrahead %}
     {{ block.super }}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <link href = "https://fonts.googleapis.com/icon?family=Material+Icons" rel = "stylesheet">
     <style>
         .body-preview {
@@ -38,13 +41,29 @@
             font-size: 20px;
         }
     </style>
+
     <script>
         let visibility = false;
 
         document.addEventListener("DOMContentLoaded", function() {
             const bodyPreviewElem = document.querySelector(".body-preview");
+            {% if adminform.form.instance.is_markdown %}
+                const converter = new showdown.Converter({});
+                bodyPreviewElem.innerHTML = converter.makeHtml(bodyPreviewElem.innerHTML);
+            {% endif %}
+
+
             document.querySelector(".form-row.field-body textarea[name='body']").addEventListener("input", function(evt) {
-                bodyPreviewElem.innerHTML = evt.target.value;
+                let html = evt.target.value;
+                {% if adminform.form.instance.is_markdown %}
+                    html = converter.makeHtml(html);
+                {% endif %}
+
+                bodyPreviewElem.innerHTML = html;
+                const codeBlocks = document.querySelectorAll("pre > code");
+                for (let i = 0; i < codeBlocks.length; i++) {
+                    hljs.highlightBlock(codeBlocks[i]);
+                }
             });
         });
 
@@ -54,6 +73,8 @@
             document.querySelector("#toggle-preview i.material-icons").textContent = visibility ? "visibility" : "visibility_off";
             document.querySelector(".body-preview").style.display = !visibility ? "none" : "block";
         }
+
+        hljs.initHighlightingOnLoad();
     </script>
 {% endblock %}
 
