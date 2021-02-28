@@ -1,0 +1,52 @@
+.code-clipboard-button {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    opacity: 0.4;
+
+    width: 30px;
+    height: 30px;
+
+    border: 1px solid rgba(100, 100, 100, 0.25);
+    user-selection: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    box-shadow: 2px 2px 2px 1px rgba(100, 100, 100, 0.95);
+}
+
+.code-clipboard-button:hover {
+    opacity: 0.95;
+}
+
+.code-clipboard-button > i {
+    font-size: 20px;
+    pointer-events: none;
+}
+
+.code-clipboard-button:hover:active {
+
+    border-color: orange;
+}
+
+.code-clipboard-button::after {
+    content: "Скопировать в буфер";
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateX(-100%) translateY(-50%);
+    border: 1px solid rgba(00, 100, 255, 0.25);
+    color: #f6e0e6;
+    font-size: 15px;
+    background-color: #c53dff;
+    padding: 6px 7px;
+    border-radius: 2px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.code-clipboard-button:hover::after {
+    opacity: 1.0;
+}

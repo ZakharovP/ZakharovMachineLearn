@@ -22,7 +22,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wozr$5u354-o@m0jqv+#u+lb^s^%@@v35#auc0sge_)=l9n^96'
+SECRET_KEY = 'wozr$5u354-o@m0jqv+#u+lb^s^%@@v35#auc0sge_)=l9n^97'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'ZakharovMachineLearn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ZakharovMachineLearn',
+        'NAME': 'ZakharovMachineLearn1',
         'USER': 'postgres',
         'PASSWORD': '12345',
         'HOST': 'localhost',
@@ -137,7 +137,8 @@ STATICFILES_DIRS = [
 
 LOGIN_URL = "/auth"
 
-#  ZakharovMachineLearn
+
+AUTH_USER_MODEL = "ZakharovMachineLearn.User"
 
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

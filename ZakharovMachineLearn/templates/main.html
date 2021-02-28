@@ -24,21 +24,23 @@
         {% endfor %}
     </div>
 
-    {% if is_ad_visible %}
-        <aside class="ad vertical">
-            <div class="ad-item">
-                <div class="head">Изучение машинного обучения в SkillBox</div>
-                <a href="https://skillbox.ru/course/profession-data-scientist/" target="_blank">
-                    <img src="https://mtdata.ru/u4/photo5073/20930459427-0/original.jpg" alt="Реклама skillbox">
-                </a>
-            </div>
-            <div class="ad-item">
-                <div class="head">Изучение машинного обучения в SkillFactory</div>
-                <a href="https://skillfactory.ru/dstpro" target="_blank">
-                    <img src="https://avatars.mds.yandex.net/get-zen_doc/1893760/pub_5e85dd2cddc8e520673d9961_5e85e3e0e76e9e2043c845a7/scale_1200" alt="Реклама skillfactory">
-                </a>
-            </div>
-        </aside>
+    {% if not user.is_authenticated or user.is_ad_shown %}
+        {% if is_ad_visible %}
+            <aside class="ad vertical">
+                <div class="ad-item">
+                    <div class="head">Изучение машинного обучения в SkillBox</div>
+                    <a href="https://skillbox.ru/course/profession-data-scientist/" target="_blank">
+                        <img src="https://mtdata.ru/u4/photo5073/20930459427-0/original.jpg" alt="Реклама skillbox">
+                    </a>
+                </div>
+                <div class="ad-item">
+                    <div class="head">Изучение машинного обучения в SkillFactory</div>
+                    <a href="https://skillfactory.ru/dstpro" target="_blank">
+                        <img src="https://avatars.mds.yandex.net/get-zen_doc/1893760/pub_5e85dd2cddc8e520673d9961_5e85e3e0e76e9e2043c845a7/scale_1200" alt="Реклама skillfactory">
+                    </a>
+                </div>
+            </aside>
+        {% endif %}
     {% endif %}
     {% include "pagination.html" %}
 {% endblock body %}

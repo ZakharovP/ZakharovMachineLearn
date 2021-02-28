@@ -186,6 +186,9 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+    <link rel="stylesheet" href="{% static 'css/code-clipboard-button.css' %}">
+<script src="{% static 'js/code-clipboard-button.js' %}"></script>
+
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
 
@@ -429,5 +432,6 @@
         }
 
         hljs.initHighlightingOnLoad();
+        window.initCodeBlockClipboardButtons();
     </script>
 {% endblock %}

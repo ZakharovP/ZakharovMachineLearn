@@ -1,8 +1,11 @@
 from datetime import datetime
 
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
+class User(AbstractUser):
+    is_ad_shown = models.BooleanField(default=True, null=False)
 
 class PostCategory(models.Model):
     title = models.CharField(max_length=300, help_text="Название категории")
@@ -27,7 +30,7 @@ class Post(models.Model):
     comment_amount = models.IntegerField(default=0, help_text="Количество комментариев")
     is_markdown = models.BooleanField(default=False, null=False, blank=True)
     is_active = models.BooleanField(default=True, null=False, help_text="Включен ли в выдачу")
-    category = models.ForeignKey(PostCategory, null=True, default=None, on_delete=models.SET_NULL)
+    category = models.ForeignKey(PostCategory, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(default=datetime.now, help_text="Дата обновления контента")
     created_at = models.DateTimeField(default=datetime.now, help_text="Дата создания")
 
