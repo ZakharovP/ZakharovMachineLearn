@@ -153,3 +153,8 @@ DATETIME_FORMAT = 'd F Y H:i'
 
 ADVERTISMENT = True
 SEND_REAL_EMAIL = False
+
+MEDIA_ROOT = os.path.join(__package__, "media")
+MEDIA_URL = "/media/"
+
+DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}

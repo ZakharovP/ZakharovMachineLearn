@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <style>
+        img {
+            background-color: white;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    <h1>Account {{ user }}</h1>
+    <img src="{{ user.avatar.url }}" alt="{{ user }}" />
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            <input type="submit" value="Сохранить">
+        </form>
+    </div>
+    <a href="/password/">Смена пароля</a>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

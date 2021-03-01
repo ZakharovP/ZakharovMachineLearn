@@ -1,7 +1,7 @@
 import json
 
 from django.http import HttpResponse, JsonResponse, Http404
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -9,12 +9,13 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.views.generic.list import ListView
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 
 
 from .forms import (
     SignUpForm, SignInForm,
-    CommentForm, PostSearchForm
+    CommentForm, PostSearchForm, UserForm, PasswordForm
 )
 
 from .models import (
@@ -251,6 +252,64 @@ def estimate(request):
         "rating": post.rating,
         "estimation_amount": post.estimation_amount
     })
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def account(request):
+    context = {}
+    if request.method == "GET":
+        user_form = UserForm(
+            instance=request.user,
+            initial={
+                'password': ''
+            }
+        )
+
+    else:
+        user_form = UserForm(request.POST, request.FILES)
+        if user_form.is_valid():
+            instance = user_form.save(commit=False)
+            instance.id = request.user.id
+            instance.username = request.user.username
+            fields = user_form.Meta.fields
+            print("user_form = ", user_form.cleaned_data)
+            #print("eq = ", user_form.cleaned_data["avatar"] == )
+            if not user_form.cleaned_data["avatar"]:
+                fields.remove("avatar")
+            print("FILEDS = ", fields)
+            instance.save(update_fields=user_form.Meta.fields)
+            return redirect("/account/")
+    context["user_form"] = user_form
+    return render(request, "account.html", context)
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def password(request):
+    context = {}
+
+    if request.method == "GET":
+        form = PasswordForm()
+
+    else:
+        form = PasswordForm(request.POST)
+        if form.is_valid():
+            old_password = form.cleaned_data["old_password"]
+            password1 = form.cleaned_data["password1"]
+            password2 = form.cleaned_data["password2"]
+            user = request.user
+
+            if not user.check_password(old_password):
+                raise ValidationError('Invalid password')
+
+            user.set_password(password1)
+            user.save()
+            update_session_auth_hash(request, user)
+
+            return redirect("/account/")
+
+    context["form"] = form
+    return render(request, "password.html", context)
 
 
 @login_required

@@ -18,16 +18,17 @@ from django.urls import path
 
 from django.views.generic.base import RedirectView
 
+from . import settings
+
 from .view import (
     PostListView, main, auth, sign_in,
     sign_up, logout_view,
     post, comment, estimate,
-    mail_check
+    mail_check, account, password
 )
 
 urlpatterns = [
     path('', PostListView.as_view()),
-    #path('search/', PostListView.as_view()),
     path('favicon.ico/', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
     path('admin/', admin.site.urls),
     path('auth/', auth),
@@ -38,5 +39,11 @@ urlpatterns = [
     path('post/<int:post_id>/', post),
     path('estimate/', estimate),
     path('comment/<int:post_id>/', comment),
-    path('mail_check/', mail_check)
+    path('mail_check/', mail_check),
+    path('account/', account),
+    path('password/', password)
 ]
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

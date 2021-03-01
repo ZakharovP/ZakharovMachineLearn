@@ -2,23 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0cc1feb8-876c-41be-9cd6-3329bdd013c2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ZakharovMachineLearn/static/css/code-clipboard-button.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ZakharovMachineLearn/static/js/code-clipboard-button.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/account.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/password.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0002_auto_20210220_1506.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0003_estimation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0004_post_estimation_amount.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0005_auto_20210221_1732.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0006_post_updated_at.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0007_auto_20210222_2355.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0008_auto_20210228_1554.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/migrations/0009_auto_20210228_1632.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/view.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,6 +29,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Petr\Downloads\ИИТ\ZakharovMachineLearn\ZakharovMachineLearn\static\img\avatars" />
       <recent name="C:\Users\Petr\Downloads\ИИТ\ZakharovMachineLearn\ZakharovMachineLearn\templates\admin\ZakharovMachineLearn" />
       <recent name="C:\Users\Petr\Downloads\ИИТ\ZakharovMachineLearn\ZakharovMachineLearn" />
     </key>

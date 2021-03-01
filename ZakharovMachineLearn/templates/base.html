@@ -172,6 +172,13 @@
             {% endif %}
             {% if request.path != '/auth/' and request.path != '/sign-in/' and request.path != '/sign-out/' %}
                 {% if user.is_authenticated %}
+                    {% if request.path != '/account/' %}
+                        <a href="/account/">
+                            <i class="material-icons">
+                                account_box
+                            </i>
+                        </a>
+                    {% endif %}
                     <form class="base-auth" action="/logout/" method="POST">
                         {% csrf_token %}
                         <button type="submit" data-type="logout">

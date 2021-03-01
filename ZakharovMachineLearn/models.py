@@ -1,11 +1,56 @@
+import os
+import os.path
+import uuid
+import hashlib
 from datetime import datetime
 
-from django.db import models
-#from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+from PIL import Image
+from django_resized import ResizedImageField
+
+
+DEFAULT_USER_AVATAR = os.path.join("avatars", "default-avatar.png")
+
+
+def get_image_path(instance, filename):
+    print("get_image_path instance = ", instance)
+    print("get_image_path FILENAME = ", filename)
+    print("__package__ = ", __package__)
+
+    filename_arr = filename.split(".")
+    if filename_arr:
+        ext = filename_arr[-1]
+    else:
+        ext = "jpg"
+
+    print("FILENAME ==== ", filename)
+    print("EXT = ", ext)
+
+    m = hashlib.sha256()
+    m.update((str(uuid.uuid1()) + filename).encode("utf-8"))
+
+    filename = m.hexdigest() + f".{ext}"
+
+    return os.path.join("avatars", filename)
+
 
 class User(AbstractUser):
+    avatar = ResizedImageField(
+        size=[400, 400],
+        upload_to=get_image_path,
+        default=DEFAULT_USER_AVATAR
+    )
     is_ad_shown = models.BooleanField(default=True, null=False)
+
+    def save(self, *args, **kwargs):
+        if self.avatar == DEFAULT_USER_AVATAR:
+            user = User.objects.get(pk=self.id)
+            self.avatar = user.avatar
+
+        super().save(*args, **kwargs)
+
 
 class PostCategory(models.Model):
     title = models.CharField(max_length=300, help_text="Название категории")

@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
-from .models import Comment, PostCategory
+from .models import User, Comment, PostCategory
 
 from django.core.exceptions import ValidationError
 
@@ -75,13 +74,6 @@ class CommentForm(forms.ModelForm):
         fields = ['text']
 
 
-CHOICES= (
-    ('1', 'ME'),
-    ('2', 'YOU'),
-    ('3', 'WE'),
-)
-
-
 class PostSearchForm(forms.Form):
     q = forms.CharField(
         label='',
@@ -96,3 +88,27 @@ class PostSearchForm(forms.Form):
         required=False,
         empty_label=" --- Все категории"
     )
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name', 'avatar']
+
+
+class PasswordForm(forms.Form):
+    old_password = forms.CharField(label="", widget=forms.PasswordInput(attrs={"placeholder": "Старый пароль"}))
+    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={"placeholder": "Новый пароль"}))
+    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={"placeholder": "Подтверждение пароля"}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        old_password = cleaned_data.get("old_password")
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 != password2:
+            raise ValidationError(
+                "password1 != password2"
+                "Пароли не совпадают"
+            )
