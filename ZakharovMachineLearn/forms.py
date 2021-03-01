@@ -107,8 +107,11 @@ class PasswordForm(forms.Form):
         password1 = cleaned_data.get("password1")
         password2 = cleaned_data.get("password2")
 
+        if hasattr(self, "user"):
+            if not self.user.check_password(old_password):
+                raise ValidationError('Неправильно введен старый пароль')
+
         if password1 != password2:
             raise ValidationError(
-                "password1 != password2"
                 "Пароли не совпадают"
             )

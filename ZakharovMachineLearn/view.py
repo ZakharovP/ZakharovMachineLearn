@@ -9,8 +9,6 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.views.generic.list import ListView
 from django.db.models import Q
-from django.core.exceptions import ValidationError
-
 
 
 from .forms import (
@@ -286,23 +284,17 @@ def account(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def password(request):
+    user = request.user
     context = {}
 
     if request.method == "GET":
         form = PasswordForm()
-
     else:
         form = PasswordForm(request.POST)
+        form.user = user
         if form.is_valid():
-            old_password = form.cleaned_data["old_password"]
-            password1 = form.cleaned_data["password1"]
-            password2 = form.cleaned_data["password2"]
-            user = request.user
-
-            if not user.check_password(old_password):
-                raise ValidationError('Invalid password')
-
-            user.set_password(password1)
+            password = form.cleaned_data["password1"]
+            user.set_password(password)
             user.save()
             update_session_auth_hash(request, user)
 

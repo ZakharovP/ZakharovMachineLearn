@@ -46,8 +46,11 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         if self.avatar == DEFAULT_USER_AVATAR:
-            user = User.objects.get(pk=self.id)
-            self.avatar = user.avatar
+            try:
+                user = User.objects.get(pk=self.id)
+                self.avatar = user.avatar
+            except User.DoesNotExist:
+                pass
 
         super().save(*args, **kwargs)
 

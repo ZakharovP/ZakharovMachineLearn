@@ -2,26 +2,163 @@
 
 {% block head %}
     <style>
-        img {
+        .container {
+            background-color: #45290c;
+            box-shadow: 0 0 6px 2px #ffb961;
+            width: 50vw;
+            margin: 5vh auto;
+            padding: 5px 20px;
+            box-sizing: border-box;
+        }
+
+        .container > .content {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            overflow-x: hidden;
+
+        }
+
+        .container > .content .general-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            margin-top: 2px;
+
+        }
+
+        .container > .content .general-container .user-info {
+            font-size: 17px;
+            margin-top: 25px;
+        }
+
+        .container > .content .general-container a.password {
+            text-decoration: none;
+            color: #AAA;
+            font-size: 16px;
+            margin: 30px 0;
+        }
+
+        .container > .content .general-container a.password:hover {
+            color: #AAF;
+        }
+
+        .container > .content .general-container img {
             background-color: white;
-            width: 200px;
-            height: 200px;
+            width: 32vh;
+            height: 32vh;
+        }
+
+        .container > .content .form-container {
+            width: 70%;
+        }
+
+        .container > .content .form-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-start;
+        }
+
+        .container > .content .form-container form a {
+            color: #c299ff;
+            text-decoration: none;
+        }
+
+        .container > .content .form-container form p {
+            width: 80%;
+            text-align: left;
+            margin: 8px 0;
+        }
+
+        .container > .content .form-container form p:nth-of-type(1) {
+            margin-top: 0;
+        }
+
+        .container > .content .form-container form p.avatar {
+            line-height: 4vh;
+            margin-top: 18px;
+        }
+
+        .container > .content .form-container form input[type="text"],
+        .container > .content .form-container form input[type="email"] {
+            padding: 5px 20px;
+            margin: 10px 0;
+            border-radius: 3px;
+            color: #444;
+            font-size: 20px;
+            width: calc(100% - 100px);
+        }
+
+        .container > .content .form-container form input[type="submit"] {
+            margin-top: 30px;
+            cursor: pointer;
+            background: #a366ff;
+            border: 1px solid #2c226e;
+            padding: 6px 10px;
+            color: #35170c;
+            outline: none;
+        }
+
+        .container > .content .form-container form input[type="submit"]:hover {
+            opacity: 0.75;
+        }
+
+        .container > .content .form-container form input[type="submit"]:hover:active {
+            border-color: yellow;
         }
     </style>
 {% endblock %}
 
 
 {% block body %}
-    <h1>Account {{ user }}</h1>
-    <img src="{{ user.avatar.url }}" alt="{{ user }}" />
-    <div>
-        <form action="" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ user_form.as_p }}
-            <input type="submit" value="Сохранить">
-        </form>
+    <div class="container">
+        <h1>Кабинет пользователя {{ user }}</h1>
+        <div class="content">
+            <div class="general-container">
+                <img src="{{ user.avatar.url }}" alt="{{ user }}" />
+                <div class="user-info">
+                    <div>
+                        <span>Ник:</span>
+                        <span>{{ user.username }}</span>
+                    </div>
+                    <div>
+                        <span>Email:</span>
+                        <span>{{ user.email }}</span>
+                    </div>
+                </div>
+                <a href="/password/" class="password">Сменить пароль</a>
+            </div>
+            <div class="form-container">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in user_form %}
+                        {% if field.name == "avatar" %}
+                            <p class="avatar">
+                                <label for="id_avatar">{{ field.label }}:</label>
+                                <a href="{{ user.avatar.url }}" target="_blank">
+                                    Текущий аватар
+                                </a><br>
+                                Изменить:
+                                <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                            </p>
+                        {% else %}
+                            <p>
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label><br>
+                                {{ field }}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                    <input type="submit" value="Сохранить">
+                </form>
+            </div>
+
+        </div>
     </div>
-    <a href="/password/">Смена пароля</a>
 {% endblock %}
 
 {% block script %}

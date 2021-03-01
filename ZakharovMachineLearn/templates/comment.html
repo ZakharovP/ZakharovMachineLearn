@@ -1,7 +1,10 @@
 <div class="comment">
     <div class="header">
         <span>
-            {{ comment.user.get_full_name }}
+            <img src="{{ comment.user.avatar.url }}" alt="{{ comment.user }}">
+            <span>
+                {{ comment.user.get_full_name }}
+            </span>
         </span>
         <span>
             {{ comment.created_at }}

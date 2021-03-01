@@ -15,6 +15,20 @@
     font-size: 14px;
 }
 
+.comment .header > span:first-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.comment .header img {
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    margin-right: 15px;
+}
+
 .comment .body {
     background-color: rgba(135, 206, 250, 0.05);
     margin-top: 40px;
