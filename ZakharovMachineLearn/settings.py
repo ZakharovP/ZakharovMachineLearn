@@ -27,6 +27,7 @@ SECRET_KEY = 'wozr$5u354-o@m0jqv+#u+lb^s^%@@v35#auc0sge_)=l9n^97'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# допустимые хосты / IP адреса для запуска процесса django
 ALLOWED_HOSTS = []
 
 
@@ -53,8 +54,10 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware'
 ]
 
+# где находятся данные по соответствию обработчиков (views) и URL запросов
 ROOT_URLCONF = 'ZakharovMachineLearn.urls'
 
+# настройки для шаблонов (где храняться, какие контекстные процессоры использовать и т.д.)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -77,7 +80,8 @@ WSGI_APPLICATION = 'ZakharovMachineLearn.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+# Настройки базы данных - имя, логин и пароль юзера,тип базы данных
+# порт.... используется Postgresql
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -92,6 +96,8 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
+
+# какие валидаторы будут использованы для проверки поля пароля при регистрации
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -112,6 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+# языковые настройки Django
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -122,39 +129,50 @@ USE_L10N = False
 
 USE_TZ = True
 
-
+# к URL автоматически добавляется слэш в конце
 APPEND_SLASH = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# префикс URL для стаитических файлов
 STATIC_URL = '/static/'
 
+# путь к дериктории со статическими файлами
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# на какой URL перенаправлять, если требуется авторизация для некоторого запроса
+# и если пользователь не авторизован
 LOGIN_URL = "/auth"
 
-
+# модель переопределенного (расширенного) пользователя - наследника
+# от AbstractUser - определяется в моделях
 AUTH_USER_MODEL = "ZakharovMachineLearn.User"
 
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST_USER = "podrivkamazov@gmail.com"
-EMAIL_HOST_PASSWORD = "pjvyirytroufelsv"
+# настройки почты (почтового сервиса)
+EMAIL_USE_TLS = True  # защищенное соединение
+EMAIL_PORT = 587  # порт SMTP сервера (почтовый сервис Google)
+EMAIL_HOST = "smtp.gmail.com"  # домен SMTP сервера
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # что используется для отправки почты
+EMAIL_HOST_USER = "podrivkamazov@gmail.com"  # username в этом почтовом сервисе
+EMAIL_HOST_PASSWORD = "pjvyirytroufelsv"  # пароль приложения почтового сервиса
 
 
-DATETIME_FORMAT = 'd F Y H:i'
+DATETIME_FORMAT = 'd F Y H:i'  # формат вывода дат в приложении
 
 
-ADVERTISMENT = True
-SEND_REAL_EMAIL = False
+ADVERTISMENT = True  # включена ли реклама
+SEND_REAL_EMAIL = False  # отправлять ли настоящий email на почту
 
+# местонахождение для MEDIA файлов (те, что пользователи загружат нам на сервер)
 MEDIA_ROOT = os.path.join(__package__, "media")
+
+# префикс URL адреса, который означает, что делается запрос на получение MEDIA файлов
 MEDIA_URL = "/media/"
 
+# нужно, чтобы при изменении размера картинки библиотекой django-resized
+# расширение файла PNG не менялось на APNG
 DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}

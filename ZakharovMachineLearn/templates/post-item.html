@@ -1,6 +1,11 @@
 <div class="post-item">
     <div class="title">
         <a href="/post/{{ post.id }}">{{ post.title }}</a>
+        {% if post.category %}
+            <span class="category">
+                {{ post.category }}
+            </span>
+        {% endif %}
     </div>
     <div class="body">
         {% autoescape off %}

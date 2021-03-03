@@ -2,12 +2,18 @@
 {% load i18n admin_urls %}
 
 {% block field_sets %}
+    {% comment %}
+        Элемент для превью тела поста
+    {% endcomment %}
     {% autoescape off %}
         <div class="body-preview" style="display: none">
             {{ adminform.form.instance.body }}
         </div>
     {% endautoescape %}
 
+    {% comment %}
+        Цикл для заполнения полей
+    {% endcomment %}
     {% for fieldset in adminform %}
       {% include "admin/includes/fieldset.html" %}
     {% endfor %}
@@ -47,26 +53,34 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             const bodyPreviewElem = document.querySelector(".body-preview");
+
+            {% comment %}
+                Если  тип "Markdown" - нужно создать объект сonverter
+            {% endcomment %}
             {% if adminform.form.instance.is_markdown %}
                 const converter = new showdown.Converter({});
                 bodyPreviewElem.innerHTML = converter.makeHtml(bodyPreviewElem.innerHTML);
             {% endif %}
 
-
+            // обработчик изменения поля - каждый раз, когда контент меняется, его надо обновить в preview
             document.querySelector(".form-row.field-body textarea[name='body']").addEventListener("input", function(evt) {
-                let html = evt.target.value;
+                let html = evt.target.value;  // контент тела поста
                 {% if adminform.form.instance.is_markdown %}
                     html = converter.makeHtml(html);
                 {% endif %}
 
+                // присваиваем элементу preview новый html
                 bodyPreviewElem.innerHTML = html;
                 const codeBlocks = document.querySelectorAll("pre > code");
+
+                // обновляем подстветку кода для всех элементов сode там
                 for (let i = 0; i < codeBlocks.length; i++) {
                     hljs.highlightBlock(codeBlocks[i]);
                 }
             });
         });
 
+        // обработчик переключения видимости элемента Preview
         function toggleVisibility(evt) {
             evt.preventDefault();
             visibility = !visibility;
@@ -79,20 +93,31 @@
 {% endblock %}
 
 
-{% block object-tools-items %}
-    <li>
-        <a id="toggle-preview" href="" onclick="toggleVisibility(event)" class="historylink">
-            <i class="material-icons">
-                visibility_off
-            </i>
-        </a>
-    </li>
-    <li>
-        <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink">{% translate "History" %}</a>
-    </li>
-    {% if has_absolute_url %}
-        <li>
-            <a href="{% url 'admin:view_on_site' content_type_id original.pk %}" class="viewsitelink">{% translate "View on site" %}</a>
-        </li>
+{% block object-tools %}
+    {% if not is_popup %}
+        <ul class="object-tools">
+            {% block object-tools-items %}
+                {% comment %}
+                    Добавляем кнопку переключения видимости элмента Preview
+                {% endcomment %}
+                <li>
+                    <a id="toggle-preview" href="" onclick="toggleVisibility(event)" class="historylink">
+                        <i class="material-icons">
+                            visibility_off
+                        </i>
+                    </a>
+                </li>
+                {% if change  %}
+                    <li>
+                        <a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink">{% translate "History" %}</a>
+                    </li>
+                    {% if has_absolute_url %}
+                        <li>
+                            <a href="{% url 'admin:view_on_site' content_type_id original.pk %}" class="viewsitelink">{% translate "View on site" %}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endblock %}
+        </ul>
     {% endif %}
 {% endblock %}

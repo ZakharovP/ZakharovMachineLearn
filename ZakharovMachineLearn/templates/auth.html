@@ -63,6 +63,7 @@
         }
 
         .auth-form input[type="text"],
+        .auth-form input[type="email"],
         .auth-form input[type="password"] {
             width: 100%;
             padding: 5px 8px;
@@ -116,27 +117,38 @@
 
 {% block script %}
     <script>
-        let section = "sign-in";
+        /*
+            В данном скрипте реализована логика переключения между формами
+            входа и регистрации
+        */
+        let section = "sign-in";  // раздел (тип формы) - вход иил регистрация
+
+        // если данный шаблон получен не по auth url, то нужно выбрать текущее состояние
+        // в зависимости от хэша в URL, который показывает раздел (то есть форма логина или регистрации)
         if (location.hash === "#sign-in") {
             section = "sign-in";
         } else if (location.hash === "#sign-up") {
             section = "sign-up";
         } else if (location.pathname.replace(/\//gim, "") !== "auth") {
+            // удаление лишнего слеша для имени секции
             section = location.pathname.replace(/\//gim, "");
         }
 
-        console.log("SECTION = ", section);
-
+        // изменяем секцию на выбранную
         changeSection(section)
 
         function handleChangingSection(evt) {
+            // функция - обработчик события клика по меню секции
+            // она получает элемент, по которому произошел клик и берет его данные
+            // по типу раздела (sign-in или sign-up)
             evt.preventDefault();
             const hash = evt.target.href.split("#")[1];
-            console.log("hash = ", hash);
-            changeSection(hash);
+            changeSection(hash);  // изменяем текущий раздел
         }
 
         function changeSection(section) {
+            // функция для изменения текущего раздела
+            // нужно удалить ряд классов у одного элемента и добавить другому
             if (section === "sign-up") {
                 document.querySelector(".sign-in-container").classList.add("hidden");
                 document.querySelector(".sign-up-container").classList.remove("hidden");

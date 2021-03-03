@@ -3,14 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="0cc1feb8-876c-41be-9cd6-3329bdd013c2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/context_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/context_processors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/static/css/comment.css" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/static/css/comment.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/account.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/comment.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/comment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/password.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/static/css/post-item.css" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/static/css/post-item.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/static/js/code-clipboard-button.js" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/static/js/code-clipboard-button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/static/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/static/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/admin/ZakharovMachineLearn/change_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/admin/ZakharovMachineLearn/post/change_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/admin/ZakharovMachineLearn/post/change_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/auth.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/auth.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/post-item.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/post-item.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/templates/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/templates/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ZakharovMachineLearn/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZakharovMachineLearn/view.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

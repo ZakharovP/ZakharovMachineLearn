@@ -10,12 +10,23 @@
 .post-item > .title {
     margin-top: 4px;
     margin-bottom: 12px;
+    position: relative;
 }
 
 .post-item > .title > a {
+    position: relative;
     color: #6666ff;
     text-decoration: none;
     font-size: 35px;
+    z-index: 10;
+}
+
+.post-item > .title > span.category {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    z-index: 1;
 }
 
 .post-item > .body {

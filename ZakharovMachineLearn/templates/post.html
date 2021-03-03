@@ -18,6 +18,10 @@
             text-indent: 2em;
         }
 
+        main img {
+            background-color: white;
+        }
+
         .indicators {
             display: flex;
             flex-direction: row;
@@ -330,8 +334,11 @@
 {% endblock %}
 
 {% block script %}
+    {% comment %}
     {% if post.is_markdown %}
         <script>
+            // расширение markdown для более сложной обработки текста
+            // в данном варианте не используется
             showdown.extension('myext', function() {
               return [
                 /*{
@@ -381,30 +388,39 @@
             })();
         </script>
     {% endif %}
+    {% endcomment %}
     <script>
+        /*
+            Скрипт для обработки оценки поста, POST запрос которой передается
+            на сервер через Ajax.
+        */
+
+        // если есть элемент рейтинга
         if (document.querySelector(".rating-container .rating")) {
+            // добавляем к нему обработчик клика
             document.querySelector(".rating-container .rating").addEventListener("click", evt => {
                 const el = evt.target;
                 const points = el.dataset.points;
-                //alert(points);
                 const data = {
                     score: points,
                     post: {{ post.id }}
                 };
+
+                // делаем POST запрос на добавление оценки
                 axios.post(
                     "/estimate/",
                     data,
                     {
-                        headers: {
+                        headers: { // токен CSRF (берем из сookie)
                             "X-CSRFTOKEN": getCookie("csrftoken")
                         }
                     }
                  )
                 .then(response => {
                     const data = response.data;
-                    console.log("DATA = ", data);
                     if (data.success) {
-                        //alert("Ваша оценка сохранена!");
+                        // если все прошло успешно,
+                        // то на этой странице надо обновить ряд данных
                         const div = document.createElement("div");
                         div.innerHTML = "Ваша оценка поста принята";
                         div.className = "result";
@@ -427,11 +443,17 @@
                 });
             });
         }
+
+        // если есть GET параметр page в URL у данной странице, то нужно прокрутить
+        // к этому значению, так как это свидетельствует о пагинации по комментариям
         if (window.location.search.indexOf("page") > -1) {
             window.location.hash = "to-comments";
         }
 
+        // инициализируем подстветку кода
         hljs.initHighlightingOnLoad();
+
+        // добавление кнопок копирования в буфер для всех элементов кода
         window.initCodeBlockClipboardButtons();
     </script>
 {% endblock %}
